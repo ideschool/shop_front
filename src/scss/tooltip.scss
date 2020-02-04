@@ -1,3 +1,58 @@
+body {
+  padding: 50px;
+}
+$tooltip-color: #9c9c9c;
 [data-tooltip] {
-  background-color: red;
+  position: relative;
+
+  &:before {
+    content: none;
+    background-color: $tooltip-color;
+    color: white;
+    padding: 4px 10px;
+    position: absolute;
+    white-space: nowrap;
+    left: 50%;
+  }
+
+  &:after {
+    content: none;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: $tooltip-color;
+    position: absolute;
+    left: 50%;
+  }
+
+  &:hover {
+    &:before {
+      content: attr(data-tooltip);
+    }
+    &:after {
+      content: '';
+    }
+  }
+
+  &.tooltip-top {
+    &:before {
+      top: -10px;
+      transform: translate(-50%, -100%);
+    }
+    &:after {
+      top: -5px;
+      transform: translate(-50%, -100%) rotate(-45deg) ;
+    }
+  }
+
+  &.tooltip-bottom {
+    &:before {
+      bottom: -10px;
+      transform: translate(-50%, 100%);
+    }
+    &:after {
+      bottom: -5px;
+      transform: translate(-50%, 100%) rotate(-45deg) ;
+    }
+  }
 }

@@ -15,3 +15,19 @@ gulp.task('sass', () => {
 gulp.task('sass:watch', () => {
     gulp.watch(scssSrc, gulp.parallel('sass'));
 });
+
+gulp.task('copy-js', () => {
+    return gulp.src('./src/js/*.js')
+        .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('copy-js:watch', () => {
+    gulp.watch('./src/js/*.js', gulp.parallel('copy-js'));
+});
+
+gulp.task('watch', gulp.parallel('sass:watch', 'copy-js:watch'));
+
+gulp.task('copy-html', () => {
+    return gulp.src('./src/*.html')
+        .pipe(gulp.dest('./dist'));
+});

@@ -31,3 +31,5 @@ gulp.task('copy-html', () => {
     return gulp.src('./src/*.html')
         .pipe(gulp.dest('./dist'));
 });
+
+gulp.task('build', gulp.parallel('sass', 'copy-js', 'copy-html'));

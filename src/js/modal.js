@@ -1,4 +1,4 @@
-class Modal {
+export class Modal {
     static ACCEPT = 'ACCEPT';
     static CANCEL = 'CANCEL';
 
@@ -9,24 +9,29 @@ class Modal {
             htmlContent: null,
             ...config,
         };
-        this.modalBackgroundElement = this.createDiv('modal-background');
-        document.body.appendChild(this.modalBackgroundElement);
-        this.modalBackgroundElement.addEventListener('click', () => {
-            this.cancel();
-        });
+        if(this.config.hasBackground) {
+            this.modalBackgroundElement = this.createDiv('modal-background');
+            document.body.appendChild(this.modalBackgroundElement);
+            this.modalBackgroundElement.addEventListener('click', () => {
+                this.cancel();
+            });
+        }
         this.modalElement = this.createDiv('modal');
         this.modalHeader = this.createDiv('modal-header');
         this.modalFooter = this.createFooter();
         this.modalContent = this.createDiv('modal-content');
+
         if (this.config.message !== null) {
             this.modalContent.innerHTML = this.config.message;
-        } else if (this.config.htmlContent) {
+        } else if (this.config.htmlContent !== null) {
             const content = this.config.htmlContent.cloneNode(true);
             content.style.display = 'block';
             this.modalContent.appendChild(content);
+            this.config.htmlContent.remove();
         } else {
             throw new Error('Modal has no content');
         }
+
         this.modalElement.appendChild(this.modalHeader);
         this.modalElement.appendChild(this.modalContent);
         this.modalElement.appendChild(this.modalFooter);
@@ -81,10 +86,3 @@ class Modal {
         return footer;
     }
 }
-
-const modal = new Modal({htmlContent: document.querySelector('#example-modal-content')});
-document.querySelector('#test').addEventListener('click', () => {
-    modal.open().then(closeType => {
-        console.log(closeType);
-    });
-});

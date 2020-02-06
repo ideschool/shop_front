@@ -6,8 +6,25 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="example-modal-content" class="modal-html-content">Modal content by html</div>
-<script src="modal.js" type="module"></script>
+<div id="example-modal-content" class="modal-html-content">
+    <input type="text">
+</div>
+<script type="module">
+    import {Modal} from "./modal.js";
+
+    const modal = new Modal({
+        htmlContent: document.querySelector('#example-modal-content')
+    });
+    document.querySelector('#test').addEventListener('click', () => {
+        modal.open().then(closeType => {
+            if(closeType === Modal.ACCEPT) {
+
+            } else {
+
+            }
+        });
+    });
+</script>
 <button id="test">Otwórz modal</button>
 </body>
 </html>

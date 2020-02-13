@@ -1,12 +1,10 @@
-class TestForm {
+class Shop {
     constructor() {
-        this.sendMeButton = document.querySelector('#send-me');
-        this.sendMeButton.addEventListener('click', this.formSubmit.bind(this));
         this.url = 'http://localhost:3000/db/sklepik';
         this.table = document.querySelector('#user-table > tbody');
     }
 
-    async formSubmit() {
+    async getShopData() {
         const items = await this.getData();
         this.clearTableBody();
         items.forEach((item) => {
@@ -15,9 +13,7 @@ class TestForm {
         });
     }
 
-    getData() {
-        return fetch(this.url).then(response => response.json())
-    };
+    getData = () => fetch(this.url).then(response => response.json());
 
     createCell(value) {
         const td = document.createElement('td');
@@ -38,4 +34,5 @@ class TestForm {
     }
 }
 
-const testForm = new TestForm();
+const shop = new Shop();
+shop.getShopData();

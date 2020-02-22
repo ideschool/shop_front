@@ -1,13 +1,20 @@
 class Shop {
     constructor() {
-        this.url = 'http://localhost:3000/db/sklepik';
+        this.url = 'http://localhost:3000/api';
         this.table = document.querySelector('#user-table > tbody');
         const sendButton = document.querySelector('#send-item-button');
         sendButton.addEventListener('click', this.submitItemData.bind(this));
     }
 
+    apiHeaders() {
+        const headers = new Headers();
+        headers.append('Authorization', 'authorization-token');
+        return headers;
+    }
+
     async getShopData() {
         const items = await this.getData();
+        console.log(items);
         this.clearTableBody();
         items.forEach((item) => {
             const row = this.createRow(item);
@@ -15,7 +22,9 @@ class Shop {
         });
     }
 
-    getData = () => fetch(this.url).then(response => response.json());
+    getData = () => fetch(`${this.url}/items`, {headers: this.apiHeaders()})
+        .then(response => response.json())
+        .then(response => response.items);
 
     createCell(value) {
         const td = document.createElement('td');
@@ -30,7 +39,7 @@ class Shop {
     createRow(item) {
         const tr = document.createElement('tr');
         ['name', 'price', 'count'].forEach(key => {
-            tr.appendChild(this.createCell(item.data[key]));
+            tr.appendChild(this.createCell(item[key]));
         });
         tr.appendChild(this.deleteButton(item._id));
         return tr;
@@ -51,6 +60,7 @@ class Shop {
         const url = `${this.url}/${id}`;
         fetch(url, {method: 'DELETE'}).then(() => this.getShopData());
     }
+
     submitItemData() {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');

@@ -22,6 +22,7 @@ class Shop {
         const items = await this.getData();
         console.log(items);
         this.clearTableBody();
+        this.items = items;
         items.forEach((item) => {
             const row = this.createRow(item);
             this.table.appendChild(row);
@@ -48,9 +49,30 @@ class Shop {
             tr.appendChild(this.createCell(item[key]));
         });
         tr.appendChild(this.deleteButton(item._id, item._rev));
+        tr.appendChild(this.updateButton(item._id));
         return tr;
     }
 
+    updateItem(docId) {
+        const item = this.items.find(item => item._id === docId);
+        document.querySelector('#name').value = item.name;
+        document.querySelector('#price').value = item.price;
+        document.querySelector('#count').value = item.count;
+        this.modal.open().then(closeType => {
+
+        });
+    }
+    updateButton(id) {
+        const button = document.createElement('button');
+        button.innerText = 'Edytuj';
+        button.dataset.docId = id;
+        button.addEventListener('click', (event) => {
+            this.updateItem(event.target.dataset.docId);
+        });
+        const cell = document.createElement('td');
+        cell.appendChild(button);
+        return cell;
+    }
     deleteButton(id, rev) {
         const button = document.createElement('button');
         button.innerText = 'Usuń';
@@ -71,29 +93,29 @@ class Shop {
 
     submitItemData() {
         const url = `${this.url}/items`;
-        let request;
-        try {
-            request = {
-                method: 'POST',
-                headers: this.apiHeaders(),
-                body: JSON.stringify(this.getFormData())
-            };
-        } catch (err) {
-            console.log(err);
-        }
+        const headers = this.apiHeaders();
+        headers.set('Content-Type', 'form-data/multipart');
+        const request = {
+            method: 'POST',
+            headers,
+            body: this.getFormData()
+        };
         if (request) {
             fetch(url, request)
                 .then(response => response.json())
-                .then(() => this.getShopData());
+                .then(() => {
+                    this.modal.close(Modal.ACCEPT);
+                    this.getShopData();
+                });
         }
     }
 
     getFormData() {
-        return {
-            name: document.querySelector('#name').value,
-            price: document.querySelector('#price').value,
-            count: document.querySelector('#count').value,
-        };
+        const formData = new FormData();
+        ['name', 'price', 'count', 'item-image'].forEach((field) => {
+            formData.append(field, document.querySelector(`#${field}`).value);
+        });
+        return formData;
     }
 }
 

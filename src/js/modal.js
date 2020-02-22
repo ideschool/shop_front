@@ -28,6 +28,7 @@ export class Modal {
             const content = this.config.htmlContent.cloneNode(true);
             content.style.display = 'block';
             this.modalContent.appendChild(content);
+            content.classList.remove('modal');
             this.config.htmlContent.remove();
         } else {
             throw new Error('Modal has no content');

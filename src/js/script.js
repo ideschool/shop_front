@@ -7,8 +7,6 @@ class Shop {
             htmlContent: document.querySelector('#edit-modal')
         });
         this.table = document.querySelector('#user-table > tbody');
-        const sendButton = document.querySelector('#send-item-button');
-        sendButton.addEventListener('click', this.submitItemData.bind(this));
     }
 
     apiHeaders() {
@@ -59,7 +57,9 @@ class Shop {
         document.querySelector('#price').value = item.price;
         document.querySelector('#count').value = item.count;
         this.modal.open().then(closeType => {
+            if(closeType === Modal.ACCEPT) {
 
+            }
         });
     }
     updateButton(id) {
@@ -104,7 +104,7 @@ class Shop {
             fetch(url, request)
                 .then(response => response.json())
                 .then(() => {
-                    this.modal.close(Modal.ACCEPT);
+                    this.modal.close(Modal.CANCEL);
                     this.getShopData();
                 });
         }
@@ -122,5 +122,9 @@ class Shop {
 const shop = new Shop();
 shop.getShopData();
 document.querySelector('#add-item').addEventListener('click', () => {
-    shop.modal.open();
+    shop.modal.open().then(closeType => {
+        if(closeType === Modal.ACCEPT) {
+            shop.submitItemData();
+        }
+    });
 });

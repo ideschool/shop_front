@@ -9,6 +9,7 @@ class Shop {
     apiHeaders() {
         const headers = new Headers();
         headers.append('Authorization', 'authorization-token');
+        headers.append('Content-Type', 'application/json');
         return headers;
     }
 
@@ -41,14 +42,15 @@ class Shop {
         ['name', 'price', 'count'].forEach(key => {
             tr.appendChild(this.createCell(item[key]));
         });
-        tr.appendChild(this.deleteButton(item._id));
+        tr.appendChild(this.deleteButton(item._id, item._rev));
         return tr;
     }
 
-    deleteButton(id) {
+    deleteButton(id, rev) {
         const button = document.createElement('button');
         button.innerText = 'Usuń';
-        button.dataset.itemId = id;
+        button.dataset.docId = id;
+        button.dataset.docRev = rev;
         button.addEventListener('click', this.removeItemHandler.bind(this));
         const cell = document.createElement('td');
         cell.appendChild(button);
@@ -56,18 +58,21 @@ class Shop {
     }
 
     removeItemHandler(event) {
-        const id = event.target.dataset.itemId;
-        const url = `${this.url}/${id}`;
-        fetch(url, {method: 'DELETE'}).then(() => this.getShopData());
+        const id = event.target.dataset.docId;
+        const rev = event.target.dataset.docRev;
+        const url = `${this.url}/items/${id}/${rev}`;
+        fetch(url, {method: 'DELETE', headers: this.apiHeaders()}).then(() => this.getShopData());
     }
 
     submitItemData() {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        const url = `${this.url}/${Date.now()}`;
+        const url = `${this.url}/items`;
         let request;
         try {
-            request = {method: 'POST', headers, body: JSON.stringify(this.getFormData())};
+            request = {
+                method: 'POST',
+                headers: this.apiHeaders(),
+                body: JSON.stringify(this.getFormData())
+            };
         } catch (err) {
             console.log(err);
         }

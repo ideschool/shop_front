@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Sklepik</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
+          integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
@@ -12,10 +14,19 @@
         <th>Nazwa</th>
         <th>Cena</th>
         <th>Ilość</th>
+        <th>Usuń</th>
     </tr>
     </thead>
     <tbody></tbody>
 </table>
+<div>
+    <form id="new-item-form">
+        <input type="text" id="name" placeholder="Nazwa artykułu" required>
+        <input type="number" id="count" placeholder="Ilość" required>
+        <input type="number" id="price" placeholder="Cena" required>
+    </form>
+    <button id="send-item-button">Wyślij dane na serwer</button>
+</div>
 <script src="script.js"></script>
 </body>
 </html>

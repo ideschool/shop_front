@@ -1,6 +1,11 @@
+import {Modal} from './modal.js';
+
 class Shop {
     constructor() {
         this.url = 'http://localhost:3000/api';
+        this.modal = new Modal({
+            htmlContent: document.querySelector('#edit-modal')
+        });
         this.table = document.querySelector('#user-table > tbody');
         const sendButton = document.querySelector('#send-item-button');
         sendButton.addEventListener('click', this.submitItemData.bind(this));
@@ -94,3 +99,6 @@ class Shop {
 
 const shop = new Shop();
 shop.getShopData();
+document.querySelector('#add-item').addEventListener('click', () => {
+    shop.modal.open();
+});

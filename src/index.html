@@ -19,7 +19,8 @@
     </thead>
     <tbody></tbody>
 </table>
-<div>
+<button id="add-item">Dodaj element</button>
+<div id="edit-modal" class="modal">
     <form id="new-item-form">
         <input type="text" id="name" placeholder="Nazwa artykułu" required>
         <input type="number" id="count" placeholder="Ilość" required>
@@ -27,6 +28,6 @@
     </form>
     <button id="send-item-button">Wyślij dane na serwer</button>
 </div>
-<script src="script.js"></script>
+<script src="script.js" type="module"></script>
 </body>
 </html>
